@@ -3,13 +3,13 @@ namespace PokemonAPI.Managers
 {
     public class PokemonManager
     {
-        PokemonDataAccess dataAccess;
+        DataAccess dataAccess;
         List<Pokemon> pokemons = new List<Pokemon>();
         public Pokemon GetPokemonByName(string name)
         {
             try
             {
-                dataAccess = new PokemonDataAccess();
+                dataAccess = new DataAccess();
                 return dataAccess.GetPokemonByName(name.ToLower());
             }
             catch (Exception)
@@ -23,7 +23,7 @@ namespace PokemonAPI.Managers
         {
             try
             {
-                dataAccess = new PokemonDataAccess();
+                dataAccess = new DataAccess();
                 return dataAccess.GetAllPokemons(pokemons);
             }
             catch (Exception)
@@ -36,7 +36,7 @@ namespace PokemonAPI.Managers
         {
             try
             {
-                dataAccess = new PokemonDataAccess();
+                dataAccess = new DataAccess();
                 return dataAccess.GetPokemonDetailsFromID(id);
             }
             catch (Exception)

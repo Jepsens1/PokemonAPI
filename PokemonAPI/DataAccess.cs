@@ -3,9 +3,9 @@ using PokemonAPI.Models;
 
 namespace PokemonAPI
 {
-    public class PokemonDataAccess
+    public class DataAccess
     {
-        const string ConnectionString = "Host=localhost;Username=postgres;Password=passw0rd;Database=PokemonDB";
+        const string ConnectionString = "Host=localhost;Username=postgres;Password=Kode2002;Database=PokemonDB";
         NpgsqlConnection conn;
         NpgsqlCommand cmd;
         NpgsqlDataReader reader;
@@ -66,6 +66,43 @@ namespace PokemonAPI
             catch (Exception)
             {
                 throw new Exception();
+            }
+        }
+        public Login GetLoginInfo(string username, string password)
+        {
+            try
+            {
+                password = EncodePassWordToBase64(password);
+                conn = new NpgsqlConnection(ConnectionString);
+                conn.Open();
+                cmd = new NpgsqlCommand("select * from login where username = @username AND password = @password", conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                Login login = new Login((int)reader["id"], (string)reader["username"], (string)reader["password"]);
+                conn.Close();
+                return login;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+                throw;
+            }
+        }
+        public string EncodePassWordToBase64(string password)
+        {
+            try
+            {
+                byte[] encData_byte = new byte[password.Length];
+                encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
+                string encodedData = Convert.ToBase64String(encData_byte);
+                return encodedData;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception("Error in base64Encode" + e.Message);
             }
         }
     }
